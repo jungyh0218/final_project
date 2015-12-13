@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 public class SignInActivity extends AppCompatActivity {
     public static boolean isLoggedIn = false;
+    public static int memberIdx = -1;
     EditText idField;
     EditText pwField;
     PHPDown phpDown;
@@ -84,6 +85,7 @@ public class SignInActivity extends AppCompatActivity {
                     String result = root.getString("status");
                     if (result.equals("OK")) {
                         isLoggedIn = true;
+                        memberIdx = Integer.parseInt(root.getString("idx"));
                         Toast toast = Toast.makeText(SignInActivity.this, "로그인 성공!", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -91,7 +93,8 @@ public class SignInActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            onDestroy();
+            finish();
+
         }
 
     }

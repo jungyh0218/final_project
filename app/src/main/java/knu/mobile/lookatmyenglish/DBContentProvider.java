@@ -6,9 +6,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,64 +24,66 @@ import java.net.URL;
 /**
  * Created by sec on 2015-12-13.
  */
-public class DBContentProvider extends ContentProvider {
-   PHPDown task;
+public class DBContentProvider{
 
-    @Override
-    public boolean onCreate() {
+    private final String INSERT = "INSERT";
+    private final static String UPDATE = "UPDATE";
+    private final static String DELETE = "DELETE";
+    private final static String QUERY = "QUERY";
+
+    PHPDown task;
+
+    private Object returnValue = null;
+    public DBContentProvider(){
         task = new PHPDown();
-        //task.execute("http://")
-        return false;
     }
 
-    @Nullable
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+    public synchronized boolean insert(String title, String content, int memberIdx){
+        String url = "http://knucsewiki.ivyro.net/insert_question.php";
+        task.execute(INSERT, url, title, content, Integer.toString(memberIdx));
+        return true;
     }
 
-    @Nullable
-    @Override
-    public String getType(Uri uri) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        return null;
-    }
-
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
-    }
-
-    private class PHPDown extends AsyncTask<String, Integer, String>{
+    private class PHPDown extends AsyncTask<String, Integer, String> {
 
         @Override
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(String... args) {
             StringBuilder jsonHtml = new StringBuilder();
-
+            String link = args[1];
+            JSONObject job = new JSONObject();
+            switch(args[0]){
+                case INSERT:
+                    try {
+                        job.put("title", args[2]);
+                        job.put("content", args[3]);
+                        job.put("questioner", args[4]);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
 
             try {
-                URL url = new URL(urls[0]);
+                URL url = new URL(link);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                if(conn != null) {
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.connect();
+                OutputStream os = conn.getOutputStream();
+                os.write(job.toString().getBytes());
+                os.flush();
+                if(conn != null){
                     conn.setConnectTimeout(10000);
-                    conn.setUseCaches(false);
+                    // conn.setUseCaches(false);
                     // 연결되었음 코드가 리턴되면.
-                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-                        while(true){
+                    if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+                       InputStream is = conn.getInputStream();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                        for(;;){
                             // 웹상에 보여지는 텍스트를 라인단위로 읽어 저장.
                             String line = br.readLine();
-                            if (line == null) break;
+                            if(line == null) break;
                             // 저장된 텍스트 라인을 jsonHtml에 붙여넣음
                             jsonHtml.append(line + "\n");
                         }
@@ -81,11 +91,25 @@ public class DBContentProvider extends ContentProvider {
                     }
                     conn.disconnect();
                 }
-            } catch (java.io.IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            Log.i("Async", "Returned");
             return jsonHtml.toString();
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+        }
     }
+
+
+
 }
