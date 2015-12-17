@@ -106,7 +106,6 @@ public class DBContentProvider{
         @Override
         protected void onCancelled() {
             super.onCancelled();
-
         }
     }
 
