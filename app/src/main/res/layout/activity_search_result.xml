@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="knu.mobile.lookatmyenglish.SearchResultActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="홈"
+            android:textColor="#ffffff"
+            android:background="#3f51b3"
+            android:onClick="onClick"
+            android:id="@+id/buttonHome" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="검색"
+            android:textColor="#ffffff"
+            android:background="#3f51b3"
+            android:onClick="onClick"
+            android:id="@+id/buttonSearch" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="질문하기"
+            android:textColor="#ffffff"
+            android:background="#3f51b3"
+            android:onClick="onClick"
+            android:id="@+id/buttonQuestion" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="프로필"
+            android:textColor="#ffffff"
+            android:background="#3f51b3"
+            android:onClick="onClick"
+            android:id="@+id/buttonProfile" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="8.5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:background="#ffffff"
+            android:id="@+id/editText" />
+
+        <!--ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonDelete" /-->
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="#0016b9"
+            android:src="@drawable/search"
+            android:id="@+id/imageButtonSearch" />
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#D6F0FF"
+        android:dividerHeight="1dp"
+        android:id="@id/android:list"></ListView>
+
+    <!--공간 맞추려고 넣은거..-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@id/android:empty" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mark"
+        android:layout_gravity="center"
+        android:paddingBottom="10dp"
+        android:id="@id/android:empty" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:id="@id/android:empty"
+        android:text="찾고 싶은 검색어를 입력하세요."
+        android:textColor="#000000"
+        android:textSize="17sp"
+        android:gravity="top|center"/>
+
+</LinearLayout>
