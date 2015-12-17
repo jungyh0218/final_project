@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="knu.mobile.lookatmyenglish.QuestionActivity">
+    tools:context="knu.mobile.lookatmyenglish.AnswerActivity"
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -20,7 +20,7 @@
             android:src="@drawable/close"
             android:background="#3f51b3"
             android:layout_gravity="center"
-            android:onClick="cancelActivity"
+            android:onClick="onClick"
             android:id="@+id/imageButtonClose" />
 
         <LinearLayout
@@ -34,13 +34,13 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/pencil"/>
+                android:src="@drawable/answer"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="질문하기"
+                android:text="답변하기"
                 android:textSize="20dp"
                 android:layout_marginLeft="10dp"
                 android:textColor="#ffffff"
@@ -54,7 +54,7 @@
             android:src="@drawable/check"
             android:background="#3f51b3"
             android:layout_gravity="center"
-            android:onClick="askQuestion"
+            android:onClick="onClick"
             android:id="@+id/imageButtonCheck" />
 
     </LinearLayout>
@@ -67,7 +67,7 @@
         android:paddingRight="10dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:hint="질문 단어/문장"
+        android:hint="&quot;Hello?&quot; 해석"
         android:textSize="20dp"
         android:id="@+id/editTextTitle" />
 

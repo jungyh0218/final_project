@@ -38,7 +38,7 @@ public class DBContentProvider{
         task = new PHPDown();
     }
 
-    public synchronized boolean insert(String title, String content, int memberIdx){
+    public boolean insert(String title, String content, int memberIdx){
         String url = "http://knucsewiki.ivyro.net/insert_question.php";
         task.execute(INSERT, url, title, content, Integer.toString(memberIdx));
         return true;
