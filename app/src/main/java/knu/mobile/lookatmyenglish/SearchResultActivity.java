@@ -22,6 +22,8 @@ public class SearchResultActivity extends AppCompatActivity {
 
             case R.id.buttonQuestion: //질문
                 i = new Intent(this, QuestionActivity.class);
+                if(!SignInActivity.isLoggedIn)
+                    i = new Intent(this, SignInActivity.class);
                 startActivity(i);
                 break;
         }

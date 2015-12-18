@@ -20,6 +20,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sec on 2015-12-13.
@@ -30,12 +32,14 @@ public class DBContentProvider{
     private final static String UPDATE = "UPDATE";
     private final static String DELETE = "DELETE";
     private final static String QUERY = "QUERY";
+    private final static String SELECT = "SELECT";
 
-    PHPDown task;
+    PHPUp task;
+    PHPDown task2;
 
     private Object returnValue = null;
     public DBContentProvider(){
-        task = new PHPDown();
+        task = new PHPUp();
     }
 
     public boolean insert(String title, String content, int memberIdx){
@@ -44,24 +48,29 @@ public class DBContentProvider{
         return true;
     }
 
-    private class PHPDown extends AsyncTask<String, Integer, String> {
+    public List<QuestionContent> searchQuestion(String keyword){
+        ArrayList<QuestionContent> questionList = new ArrayList<QuestionContent>();
+        return questionList;
+    }
+
+
+
+    private class PHPUp extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... args) {
             StringBuilder jsonHtml = new StringBuilder();
             String link = args[1];
             JSONObject job = new JSONObject();
-            switch(args[0]){
-                case INSERT:
-                    try {
-                        job.put("title", args[2]);
-                        job.put("content", args[3]);
-                        job.put("questioner", args[4]);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+
+            try {
+                job.put("title", args[2]);
+                job.put("content", args[3]);
+                job.put("questioner", args[4]);
+            }catch (JSONException e) {
+                e.printStackTrace();
             }
+
 
             try {
                 URL url = new URL(link);
@@ -100,7 +109,9 @@ public class DBContentProvider{
 
         @Override
         protected void onPostExecute(String s) {
+
             super.onPostExecute(s);
+
         }
 
         @Override
@@ -111,5 +122,50 @@ public class DBContentProvider{
     }
 
 
-
+    private class PHPDown extends AsyncTask<String, Integer, String>{
+        @Override
+        protected String doInBackground(String... args) {
+            StringBuilder jsonHtml = new StringBuilder();
+            String link = args[1];
+            JSONObject job = new JSONObject();
+            try {
+                job.put("keyword", args[2]);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                URL url = new URL(link);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.connect();
+                OutputStream os = conn.getOutputStream();
+                os.write(job.toString().getBytes());
+                os.flush();
+                if(conn != null){
+                    conn.setConnectTimeout(10000);
+                    // conn.setUseCaches(false);
+                    // 연결되었음 코드가 리턴되면.
+                    if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+                        InputStream is = conn.getInputStream();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                        for(;;){
+                            // 웹상에 보여지는 텍스트를 라인단위로 읽어 저장.
+                            String line = br.readLine();
+                            if(line == null) break;
+                            // 저장된 텍스트 라인을 jsonHtml에 붙여넣음
+                            jsonHtml.append(line + "\n");
+                        }
+                        br.close();
+                    }
+                    conn.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.i("Async", "Returned");
+            return jsonHtml.toString();
+        }
+    }
 }

@@ -55,6 +55,8 @@ public class QuestionViewActivity extends AppCompatActivity {
 
             case R.id.buttonAnswer: //←버튼
                 Intent i = new Intent(this, AnswerActivity.class);
+                if(!SignInActivity.isLoggedIn)
+                    i = new Intent(this, SignInActivity.class);
                 startActivity(i);
                 break;
         }
