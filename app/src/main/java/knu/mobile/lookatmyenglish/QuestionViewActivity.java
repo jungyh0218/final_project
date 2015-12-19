@@ -183,5 +183,91 @@ public class QuestionViewActivity extends AppCompatActivity {
 
             return rowView;
         }
+
     }
+
+    public void vote(View v){
+        if(SignInActivity.memberIdx == -1){
+            Toast toast = Toast.makeText(this, "먼저 로그인하세요.", Toast.LENGTH_SHORT);
+            toast.show();
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
+            return;
+        }
+        PHPUp task = new PHPUp();
+        switch(v.getId()){
+            case R.id.imageButtonLike:
+                task.execute("VoteUp");
+                break;
+            case R.id.imageButtonUnlike:
+                task.execute("VoteDown");
+                break;
+        }
+    }
+
+    private class PHPUp extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... args) {
+            StringBuilder jsonHtml = new StringBuilder();
+            String link = "";
+            if(args[0].equals("VoteUp")) {
+                link = "http://knucsewiki.ivyro.net/voteup.php?question_id=" + question_id + "&memberIdx="+SignInActivity.memberIdx;
+            }else{
+                link = "http://knucsewiki.ivyro.net/votedown.php?question_id=" + question_id + "&memberIdx="+SignInActivity.memberIdx;
+            }
+            try {
+                URL url = new URL(link);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+
+                if(conn != null){
+                    conn.setConnectTimeout(10000);
+                    // conn.setUseCaches(false);
+                    // 연결되었음 코드가 리턴되면.
+                    if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                        for(;;){
+                            // 웹상에 보여지는 텍스트를 라인단위로 읽어 저장.
+                            String line = br.readLine();
+                            if(line == null) break;
+                            // 저장된 텍스트 라인을 jsonHtml에 붙여넣음
+                            jsonHtml.append(line + "\n");
+                        }
+                        br.close();
+                    }
+                    conn.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.i("Async", "Returned");
+            return jsonHtml.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String str) {
+            super.onPostExecute(str);
+
+            try {
+                JSONObject job = new JSONObject(str);
+                String result = job.getString("status");
+
+                if(result.equals("OK")){
+                    Toast toast = Toast.makeText(QuestionViewActivity.this, "Vote 완료", Toast.LENGTH_SHORT);
+                    toast.show();
+                }else if(result.equals("Duplicated")){
+                    Toast toast = Toast.makeText(QuestionViewActivity.this, "이미 투표했습니다.", Toast.LENGTH_SHORT);
+                    toast.show();
+                }else{
+                    Toast toast = Toast.makeText(QuestionViewActivity.this, "Vote 실패", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
