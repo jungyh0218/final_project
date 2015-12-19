@@ -1,18 +1,21 @@
 package knu.mobile.lookatmyenglish;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * Created by sec on 2015-12-17.
  */
-public class QuestionContent {
+public class QuestionContent implements Serializable{
+    private int question_id;
     private String title;
     private String content;
     private String date;
     private String questioner;
     int vote;
 
-    public QuestionContent(String title, String content, String date, String questioner, int vote){
+    public QuestionContent(int question_id, String title, String content, String questioner, String date, int vote){
+        this.question_id = question_id;
         this.title = title;
         this.content = content;
         this.date = date;

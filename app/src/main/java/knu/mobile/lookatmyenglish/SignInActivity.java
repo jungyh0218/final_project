@@ -92,12 +92,12 @@ public class SignInActivity extends AppCompatActivity {
                         memberIdx = Integer.parseInt(root.getString("idx"));
                         Toast toast = Toast.makeText(SignInActivity.this, "로그인 성공!", Toast.LENGTH_SHORT);
                         toast.show();
+                        finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            finish();
 
         }
 

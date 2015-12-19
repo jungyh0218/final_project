@@ -22,7 +22,7 @@ public class QuestionActivity extends AppCompatActivity {
         }
         String titleText = ((EditText)findViewById(R.id.editTextTitle)).getText().toString();
         String contentText = ((EditText)findViewById(R.id.editTextContent)).getText().toString();
-        DBContentProvider dbContentProvider = new DBContentProvider();
+        DBContentProvider dbContentProvider = new DBContentProvider(QuestionActivity.this);
         dbContentProvider.insert(titleText, contentText.toString(), SignInActivity.memberIdx);
         Toast toast = Toast.makeText(this, "질문을 등록했습니다.", Toast.LENGTH_SHORT);
         toast.show();
