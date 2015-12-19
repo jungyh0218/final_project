@@ -88,16 +88,16 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#D6F0FF"
-        android:dividerHeight="1dp"
-        android:id="@id/android:list"></ListView>
+        android:paddingLeft="20dp"
+        android:visibility="invisible"
+        android:id="@+id/listView"></ListView>
 
     <!--공간 맞추려고 넣은거..-->
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@id/android:empty" />
+        android:id="@+id/imageView"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -105,16 +105,16 @@
         android:src="@drawable/mark"
         android:layout_gravity="center"
         android:paddingBottom="10dp"
-        android:id="@id/android:empty" />
+        android:id="@+id/imageViewMark" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:id="@id/android:empty"
         android:text="찾고 싶은 검색어를 입력하세요."
         android:textColor="#000000"
         android:textSize="17sp"
-        android:gravity="top|center"/>
+        android:gravity="top|center"
+        android:id="@+id/textViewInfo"/>
 
 </LinearLayout>

@@ -1,13 +1,22 @@
 package knu.mobile.lookatmyenglish;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +31,7 @@ import java.util.ArrayList;
 
 public class SearchResultActivity extends AppCompatActivity {
 
+    Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +46,12 @@ public class SearchResultActivity extends AppCompatActivity {
                 String keyword = keywordText.getText().toString();
                 DBContentProvider dbContentProvider = new DBContentProvider(SearchResultActivity.this);
                 //ArrayList<QuestionContent> result
-                        //= (ArrayList<QuestionContent>)dbContentProvider.searchQuestion(keyword);
-               searchQuestion(keyword);
+                //= (ArrayList<QuestionContent>)dbContentProvider.searchQuestion(keyword);
+                searchQuestion(keyword);
 
             }
         });
     }
-
-
 
     public void onClick(View v) {
         switch (v.getId()) {
@@ -106,6 +114,11 @@ public class SearchResultActivity extends AppCompatActivity {
 
             String id;
             try {
+                if(str.equals("no data\n")){
+                    Toast toast = Toast.makeText(SearchResultActivity.this, "검색결과가 존재하지 않습니다.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
                 JSONArray jsonArray = new JSONArray(str);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject job = jsonArray.getJSONObject(i);
@@ -123,14 +136,62 @@ public class SearchResultActivity extends AppCompatActivity {
             catch(JSONException e){
                 e.printStackTrace();
             }
-//이 부분에서 ArrayList questionList 에 필요한 정보가 들어있어요
-        //ArrayAdapter 사용해서 ListView 안에 출력되게
 
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            ImageView imageViewMark = (ImageView) findViewById(R.id.imageViewMark);
+            TextView textView = (TextView) findViewById(R.id.textViewInfo);
 
-        //    finish();
+        //ListView 출력
+            ListView listView = (ListView) findViewById(R.id.listView);
+            QuestionListAdapter adapter = new QuestionListAdapter(mContext,0,questionList);
+            listView.setAdapter(adapter);
+
+            listView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+            imageViewMark.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.INVISIBLE);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(SearchResultActivity.this, QuestionViewActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private class QuestionListAdapter extends ArrayAdapter<QuestionContent> {
+
+        private ArrayList<QuestionContent> mQuestionData;
+
+        public QuestionListAdapter(Context context, int resource, ArrayList<QuestionContent> questionData) {
+            super(context, resource, questionData);
+
+            mQuestionData = questionData;
         }
 
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View rowView= inflater.inflate(R.layout.item, null, true);
+
+            TextView txtTitle = (TextView) rowView.findViewById(R.id.textViewTitle);
+            TextView txtContent = (TextView) rowView.findViewById(R.id.textViewContent);
+            TextView txtDate = (TextView) rowView.findViewById(R.id.textViewTime);
+
+            txtTitle.setText(mQuestionData.get(position).getTitle());
+            if(mQuestionData.get(position).getContent().length()>30)
+                txtContent.setText(mQuestionData.get(position).getContent().substring(0,30)+"...");
+            else
+                txtContent.setText(mQuestionData.get(position).getContent());
+            txtDate.setText(mQuestionData.get(position).getDate());
+
+            return rowView;
+        }
     }
+
 
     ArrayList<QuestionContent> questionList;
     PHPDown task2;
