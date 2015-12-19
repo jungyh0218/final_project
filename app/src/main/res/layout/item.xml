@@ -16,15 +16,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="상세내용"
-        android:textColor="#999999"
+        android:textColor="#8b8b8b"
         android:id="@+id/textViewContent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1993.05.17"
+        android:text="1993.05.17  |  pink1073  |  추천 3"
         android:textSize="13dp"
         android:textColor="#bcbcbc"
-        android:id="@+id/textViewTime" />
+        android:id="@+id/textViewOption" />
 </LinearLayout>

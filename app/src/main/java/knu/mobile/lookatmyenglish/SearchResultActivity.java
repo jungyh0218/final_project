@@ -27,7 +27,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class SearchResultActivity extends AppCompatActivity {
 
@@ -194,19 +199,69 @@ public class SearchResultActivity extends AppCompatActivity {
 
             TextView txtTitle = (TextView) rowView.findViewById(R.id.textViewTitle);
             TextView txtContent = (TextView) rowView.findViewById(R.id.textViewContent);
-            TextView txtDate = (TextView) rowView.findViewById(R.id.textViewTime);
+            TextView txtOption = (TextView) rowView.findViewById(R.id.textViewOption);
 
-            txtTitle.setText(mQuestionData.get(position).getTitle());
-            if(mQuestionData.get(position).getContent().length()>30)
-                txtContent.setText(mQuestionData.get(position).getContent().substring(0,30)+"...");
+            String title = mQuestionData.get(position).getTitle().replaceAll("\n"," ");
+            String preview = mQuestionData.get(position).getContent().replaceAll("\n"," ");
+            String date = mQuestionData.get(position).getDate();
+            String id = mQuestionData.get(position).getQuestioner();
+            int vote = mQuestionData.get(position).getVote();
+
+            if(title.length() > 50)
+                txtTitle.setText(title.substring(0, 50)+"...");
             else
-                txtContent.setText(mQuestionData.get(position).getContent());
-            txtDate.setText(mQuestionData.get(position).getDate());
+                txtTitle.setText(title);
+
+            if(preview.length() > 100)
+                txtContent.setText(preview.substring(0, 100)+"...");
+            else
+                txtContent.setText(preview);
+
+            date = calDate(date);
+            txtOption.setText(date + "  |  "+ id +"  |  추천 "+vote);
 
             return rowView;
         }
     }
 
+    public String calDate(String thatday){
+        String output = "";
+        int todayS, thatdayS, sub;
+
+        // 현재 날짜 구하기
+        Calendar calendar = new GregorianCalendar(Locale.KOREA);
+        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String today = fm.format(new Date());
+
+        //같은 날
+        if (today.substring(0, 10).equals(thatday.substring(0, 10))){
+            thatdayS = Integer.parseInt(thatday.substring(11, 13))*3600
+                    + Integer.parseInt(thatday.substring(14, 16))*60 + Integer.parseInt(thatday.substring(17, 19));
+            todayS = Integer.parseInt(today.substring(11, 13))*3600
+                    + Integer.parseInt(today.substring(14, 16))*60 + Integer.parseInt(today.substring(17, 19));
+
+            sub = todayS - thatdayS;
+
+            if(sub < 60) output = Integer.toString(sub)+"초 전";
+            else if(sub < 3600) output = Integer.toString(sub/60)+"분 전";
+            else output = Integer.toString(sub/3600)+"시간 전";
+        }
+
+        //1일 이상 전
+        else {
+            if(today.substring(0, 7).equals(thatday.substring(0, 7))) {
+                sub = Integer.parseInt(today.substring(8, 10)) - Integer.parseInt(thatday.substring(8, 10));
+                output = Integer.toString(sub) + "일 전";
+            }
+            else if(today.substring(0, 4).equals(thatday.substring(0, 4))){
+                sub = Integer.parseInt(today.substring(5, 7)) - Integer.parseInt(thatday.substring(5, 7));
+                output = Integer.toString(sub) + "달 전";
+            }
+            else
+                output = thatday.substring(0, 10);
+        }
+        return output;
+    }
 
     ArrayList<QuestionContent> questionList;
     PHPDown task2;
