@@ -27,6 +27,7 @@ public class AnswerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
         QuestionContent content;
+        question_id = getIntent().getIntExtra("question_id", 0);
 
     }
 
