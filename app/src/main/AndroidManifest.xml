@@ -25,10 +25,20 @@
         </activity>
         <activity android:name=".QuestionActivity" >
         </activity>
-        <activity android:name=".QuestionViewActivity">
+        <activity android:name=".QuestionViewActivity" >
         </activity>
-        <activity android:name=".SearchResultActivity"></activity>
-        <activity android:name=".AnswerActivity"></activity>
+        <activity android:name=".SearchResultActivity" />
+        <activity android:name=".AnswerActivity" />
+
+        <receiver android:name=".AppWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

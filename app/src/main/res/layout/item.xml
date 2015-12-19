@@ -26,5 +26,5 @@
         android:text="1993.05.17"
         android:textSize="13dp"
         android:textColor="#bcbcbc"
-        android:id="@+id/textViewWhen" />
+        android:id="@+id/textViewTime" />
 </LinearLayout>
