@@ -12,7 +12,7 @@ public class QuestionContent implements Serializable{
     private String content;
     private String date;
     private String questioner;
-    int vote;
+    private int vote;
 
     public QuestionContent(int question_id, String title, String content, String questioner, String date, int vote){
         this.question_id = question_id;
@@ -23,6 +23,9 @@ public class QuestionContent implements Serializable{
         this.vote = vote;
     }
 
+    public int getQuestionId(){
+        return this.question_id;
+    }
     public String getTitle(){
         return title;
     }

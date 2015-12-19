@@ -51,6 +51,14 @@ public class SearchResultActivity extends AppCompatActivity {
 
             }
         });
+       /* ListView listView = (ListView)findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                QuestionContent item = questionList.get(position);
+
+            }
+        });*/
     }
 
     public void onClick(View v) {
@@ -154,7 +162,14 @@ public class SearchResultActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    QuestionContent item = questionList.get(position);
                     Intent intent = new Intent(SearchResultActivity.this, QuestionViewActivity.class);
+                    intent.putExtra("title", item.getTitle());
+                    intent.putExtra("content", item.getContent());
+                    intent.putExtra("questioner", item.getQuestioner());
+                    intent.putExtra("date", item.getDate());
+                    intent.putExtra("question_id", item.getQuestionId());
+                    intent.putExtra("vote", item.getVote());
                     startActivity(intent);
                 }
             });
