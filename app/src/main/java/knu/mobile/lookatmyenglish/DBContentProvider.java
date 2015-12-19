@@ -43,7 +43,7 @@ public class DBContentProvider{
     //PHPDown task2;
 
     Context context;
-    private Object returnValue = null;
+    //private Object returnValue = null;
     public DBContentProvider(Context context)
     {
         this.context = context;
