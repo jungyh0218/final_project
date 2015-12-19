@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="knu.mobile.lookatmyenglish.SearchResultActivity"
+    android:background="#f1f1f1"
     android:orientation="vertical">
 
     <LinearLayout
@@ -89,6 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:visibility="invisible"
         android:id="@+id/listView"></ListView>
 
