@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, QuestionViewActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -47,11 +46,15 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.buttonQuestion: //질문
                 i = new Intent(this, QuestionActivity.class);
+                if(!SignInActivity.isLoggedIn)
+                    i = new Intent(this, SignInActivity.class);
                 startActivity(i);
                 break;
 
             case R.id.buttonProfile: //프로필
                 i = new Intent(this, QuestionViewActivity.class);
+                if(!SignInActivity.isLoggedIn)
+                    i = new Intent(this, SignInActivity.class);
                 startActivity(i);
                 break;
         }
