@@ -59,4 +59,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+    //여기에 10개 가져와서 출력하는 코드 작성.
 }
