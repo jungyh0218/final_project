@@ -49,9 +49,6 @@ public class SearchResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String keyword = keywordText.getText().toString();
-                DBContentProvider dbContentProvider = new DBContentProvider(SearchResultActivity.this);
-                //ArrayList<QuestionContent> result
-                //= (ArrayList<QuestionContent>)dbContentProvider.searchQuestion(keyword);
                 searchQuestion(keyword);
 
             }
@@ -270,5 +267,12 @@ public class SearchResultActivity extends AppCompatActivity {
         String link = "http://knucsewiki.ivyro.net/select_question.php";
         task2 = new PHPDown();
         task2.execute("Query", link, keyword);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        final EditText keywordText = (EditText)findViewById(R.id.editTextSearch);
+        searchQuestion(keywordText.getText().toString());
     }
 }
