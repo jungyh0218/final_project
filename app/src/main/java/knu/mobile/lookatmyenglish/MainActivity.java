@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,9 +57,16 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.buttonProfile: //프로필
                 i = new Intent(this, QuestionViewActivity.class);
-                if(!SignInActivity.isLoggedIn)
+                if(!SignInActivity.isLoggedIn){
                     i = new Intent(this, SignInActivity.class);
-                startActivity(i);
+                    startActivity(i);
+                }else{
+                    SignInActivity.isLoggedIn = false;
+                    Toast toast = Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    Button loginout = (Button)findViewById(R.id.buttonProfile);
+                    loginout.setText("로그인");
+                }
                 break;
         }
     }
@@ -248,6 +256,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(SignInActivity.isLoggedIn){
+            Button loginout = (Button)findViewById(R.id.buttonProfile);
+            loginout.setText("로그아웃");
+        }
         searchQuestion();
     }
 }

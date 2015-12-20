@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="프로필"
+            android:text="로그인"
             android:textColor="#ffffff"
             android:background="#3f51b3"
             android:id="@+id/buttonProfile"

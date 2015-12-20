@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -72,9 +73,16 @@ public class SearchResultActivity extends AppCompatActivity {
 
             case R.id.buttonQuestion: //질문
                 i = new Intent(this, QuestionActivity.class);
-                if(!SignInActivity.isLoggedIn)
+                if(!SignInActivity.isLoggedIn){
                     i = new Intent(this, SignInActivity.class);
-                startActivity(i);
+                    startActivity(i);
+                }else{
+                    SignInActivity.isLoggedIn = false;
+                    Toast toast = Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    Button loginout = (Button)findViewById(R.id.buttonProfile);
+                    loginout.setText("로그인");
+                }
                 break;
         }
     }
@@ -272,6 +280,10 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        if(SignInActivity.isLoggedIn){
+            Button loginout = (Button)findViewById(R.id.buttonProfile);
+            loginout.setText("로그아웃");
+        }
         final EditText keywordText = (EditText)findViewById(R.id.editTextSearch);
         searchQuestion(keywordText.getText().toString());
     }
