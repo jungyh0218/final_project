@@ -22,12 +22,16 @@ public class AnswerActivity extends AppCompatActivity {
 
     private int question_id;
     private int answerer = SignInActivity.memberIdx;
+    private String question_title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
         QuestionContent content;
         question_id = getIntent().getIntExtra("question_id", 0);
+        question_title =  getIntent().getStringExtra("title"); ///////////////★
+        EditText editText = (EditText)findViewById(R.id.editTextTitle2);///////////////★
+        editText.setText(question_title+ " 번역/해석");///////////////★
 
     }
 

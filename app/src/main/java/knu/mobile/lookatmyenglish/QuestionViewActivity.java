@@ -32,6 +32,7 @@ public class QuestionViewActivity extends AppCompatActivity {
     ArrayList<AnswerContent> answerList;
     AnswerListAdapter adapName;
     int question_id;
+    String question_title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class QuestionViewActivity extends AppCompatActivity {
         idTextView.setText(intent.getStringExtra("questioner") + " | ");
         timeTextView.setText(intent.getStringExtra("date"));
         question_id = intent.getIntExtra("question_id", 0);
+        question_title = intent.getStringExtra("title");
     }
 
 /*    //스크롤뷰 안에서 리스트뷰 사용!! 인데 안됩니다!!!ㅠㅠ
@@ -75,6 +77,7 @@ public class QuestionViewActivity extends AppCompatActivity {
 
             case R.id.buttonAnswer: //←버튼
                 Intent i = new Intent(this, AnswerActivity.class);
+                i.putExtra("title", question_title); ///////////////★
                 i.putExtra("question_id", question_id);
                 if(!SignInActivity.isLoggedIn)
                     i = new Intent(this, SignInActivity.class);
