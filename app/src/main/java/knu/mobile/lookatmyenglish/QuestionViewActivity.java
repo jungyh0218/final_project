@@ -32,6 +32,7 @@ public class QuestionViewActivity extends AppCompatActivity {
     ArrayList<AnswerContent> answerList;
     AnswerListAdapter adapName;
     int question_id;
+    String question_title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +43,14 @@ public class QuestionViewActivity extends AppCompatActivity {
         TextView contentTextView = (TextView)findViewById(R.id.textViewContent);
         TextView idTextView = (TextView)findViewById(R.id.textViewId);
         TextView timeTextView = (TextView)findViewById(R.id.textViewTime);
+        Button buttonVote = (Button)findViewById(R.id.buttonVote);
         titleTextView.setText(intent.getStringExtra("title"));
         contentTextView.setText(intent.getStringExtra("content"));
         idTextView.setText(intent.getStringExtra("questioner") + " | ");
         timeTextView.setText(intent.getStringExtra("date"));
+        buttonVote.setText(intent.getIntExtra("vote", 0) + " 추천");
         question_id = intent.getIntExtra("question_id", 0);
+        question_title = intent.getStringExtra("title");
     }
 
 /*    //스크롤뷰 안에서 리스트뷰 사용!! 인데 안됩니다!!!ㅠㅠ
@@ -75,6 +79,7 @@ public class QuestionViewActivity extends AppCompatActivity {
 
             case R.id.buttonAnswer: //←버튼
                 Intent i = new Intent(this, AnswerActivity.class);
+                i.putExtra("title", question_title); ///////////////★
                 i.putExtra("question_id", question_id);
                 if(!SignInActivity.isLoggedIn)
                     i = new Intent(this, SignInActivity.class);
@@ -311,12 +316,16 @@ public class QuestionViewActivity extends AppCompatActivity {
                         str2 = str2.split(" ")[0];
                         int num = Integer.parseInt(str2);
                         voteButton.setText((num + 1) + " 추천");
+                        Button voteup = (Button)findViewById(R.id.buttonLike);
+                        voteup.setBackgroundResource(R.drawable.checklike);
                     }else if(command.equals("VoteDown")){
                         Button voteButton = (Button)findViewById(R.id.buttonVote);
                         String str2 = voteButton.getText().toString();
                         str2 = str2.split(" ")[0];
                         int num = Integer.parseInt(str2);
                         voteButton.setText((num-1) + " 추천");
+                        Button votedown = (Button)findViewById(R.id.buttonUnlike);
+                        votedown.setBackgroundResource(R.drawable.checkunlike);
                     }else if(command.equals("VoteUpAnswer")){
                         ListView listView = (ListView)findViewById(R.id.listViewAnswer);
                         View rowView = (View)listView.getChildAt(pos);
@@ -325,6 +334,8 @@ public class QuestionViewActivity extends AppCompatActivity {
                         str2 = str2.split(" ")[0];
                         int num = Integer.parseInt(str2);
                         voteButton.setText((num+1) + " 추천");
+                        Button voteup = (Button)rowView.findViewById(R.id.buttonLikeAnswer);
+                        voteup.setBackgroundResource(R.drawable.checklike);
                     }else{
                         ListView listView = (ListView)findViewById(R.id.listViewAnswer);
                         View rowView = (View)listView.getChildAt(pos);
@@ -333,6 +344,8 @@ public class QuestionViewActivity extends AppCompatActivity {
                         str2 = str2.split(" ")[0];
                         int num = Integer.parseInt(str2);
                         voteButton.setText((num-1) + " 추천");
+                        Button votedown = (Button)rowView.findViewById(R.id.buttonLikeAnswer);
+                        votedown.setBackgroundResource(R.drawable.checklike);
                     }
                 }else if(result.equals("Duplicated")){
                     Toast toast = Toast.makeText(QuestionViewActivity.this, "이미 투표했습니다.", Toast.LENGTH_SHORT);
