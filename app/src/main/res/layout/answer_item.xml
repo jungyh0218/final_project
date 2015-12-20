@@ -61,6 +61,7 @@
             android:src="@drawable/like"
             android:layout_marginRight="10dp"
             android:background="#ffffff"
+            android:onClick="vote2"
             android:id="@+id/imageButtonLikeAnswer" />
 
         <ImageButton
@@ -68,6 +69,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/unlike"
             android:background="#ffffff"
+            android:onClick="vote2"
             android:id="@+id/imageButtonUnlikeAnswer" />
 
     </LinearLayout>
