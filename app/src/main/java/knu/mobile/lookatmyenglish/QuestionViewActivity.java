@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import java.util.List;
 public class QuestionViewActivity extends AppCompatActivity {
 
     ArrayList<AnswerContent> answerList;
+    AnswerListAdapter adapName;
     int question_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class QuestionViewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //answerList = new ArrayList<AnswerContent>();
         PHPDown task = new PHPDown();
         task.execute(Integer.toString(question_id));
 
@@ -154,7 +157,7 @@ public class QuestionViewActivity extends AppCompatActivity {
                 }
             }
             ListView listView = (ListView) findViewById(R.id.listViewAnswer);
-            AnswerListAdapter adapName = new AnswerListAdapter(
+            adapName = new AnswerListAdapter(
                     QuestionViewActivity.this, 0, answerList
             );
             listView.setAdapter(adapName);
@@ -181,37 +184,37 @@ public class QuestionViewActivity extends AppCompatActivity {
             txtContent.setText(mAnswerList.get(position).getContent());
             txtDate.setText(mAnswerList.get(position).getDate());
             txtId.setText(mAnswerList.get(position).getAnswerer() + " | ");
+            Button voteButton = (Button)rowView.findViewById(R.id.buttonVoteAnswer);
+            voteButton.setText(mAnswerList.get(position).getVote() + " 추천");
 
-            ImageButton likeButton = (ImageButton)rowView.findViewById(R.id.imageButtonLikeAnswer);
-            ImageButton unLikeButton = (ImageButton)rowView.findViewById(R.id.imageButtonUnlikeAnswer);
+            Button likeButton = (Button)rowView.findViewById(R.id.buttonLikeAnswer);
+            Button unLikeButton = (Button)rowView.findViewById(R.id.buttonUnlikeAnswer);
             final int pos = position;
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!SignInActivity.isLoggedIn){
+                    if (!SignInActivity.isLoggedIn) {
                         Toast toast = Toast.makeText(QuestionViewActivity.this, "먼저 로그인하세요.", Toast.LENGTH_SHORT);
                         toast.show();
                         Intent i = new Intent(QuestionViewActivity.this, SignInActivity.class);
                         startActivity(i);
-                    }
-                    else {
+                    } else {
                         PHPUp task = new PHPUp();
-                        task.execute("VoteUpAnswer", Integer.toString(answerList.get(pos).getAnswerId()));
+                        task.execute("VoteUpAnswer", Integer.toString(answerList.get(pos).getAnswerId()), Integer.toString(pos));
                     }
                 }
             });
             unLikeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!SignInActivity.isLoggedIn){
+                    if (!SignInActivity.isLoggedIn) {
                         Toast toast = Toast.makeText(QuestionViewActivity.this, "먼저 로그인하세요.", Toast.LENGTH_SHORT);
                         toast.show();
                         Intent i = new Intent(QuestionViewActivity.this, SignInActivity.class);
                         startActivity(i);
-                    }
-                    else {
+                    } else {
                         PHPUp task = new PHPUp();
-                        task.execute("VoteDownAnswer", Integer.toString(answerList.get(pos).getAnswerId()));
+                        task.execute("VoteDownAnswer", Integer.toString(answerList.get(pos).getAnswerId()), Integer.toString(pos));
                     }
                 }
             });
@@ -230,29 +233,34 @@ public class QuestionViewActivity extends AppCompatActivity {
             return;
         }
         PHPUp task = new PHPUp();
+
         switch(v.getId()){
-            case R.id.imageButtonLike:
+            case R.id.buttonLike:
                 task.execute("VoteUp");
                 break;
-            case R.id.imageButtonUnlike:
+            case R.id.buttonUnlike:
                 task.execute("VoteDown");
                 break;
         }
     }
 
     private class PHPUp extends AsyncTask<String, Integer, String>{
-
+            String command = "";
+            int pos;
         @Override
         protected String doInBackground(String... args) {
             StringBuilder jsonHtml = new StringBuilder();
             String link = "";
+            command = args[0];
             if(args[0].equals("VoteUp")) {
                 link = "http://knucsewiki.ivyro.net/voteup.php?question_id=" + question_id + "&memberIdx="+SignInActivity.memberIdx;
             }else if(args[0].equals("VoteDown")){
                 link = "http://knucsewiki.ivyro.net/votedown.php?question_id=" + question_id + "&memberIdx="+SignInActivity.memberIdx;
             }else if(args[0].equals("VoteUpAnswer")){
+                pos = Integer.parseInt(args[2]);
                 link = "http://knucsewiki.ivyro.net/voteup_answer.php?answer_id=" + args[1] + "&memberIdx="+SignInActivity.memberIdx;
             }else{
+                pos = Integer.parseInt(args[2]);
                 link = "http://knucsewiki.ivyro.net/votedown_answer.php?answer_id=" + args[1] + "&memberIdx="+SignInActivity.memberIdx;
             }
             try {
@@ -296,6 +304,36 @@ public class QuestionViewActivity extends AppCompatActivity {
                 if(result.equals("OK")){
                     Toast toast = Toast.makeText(QuestionViewActivity.this, "Vote 완료", Toast.LENGTH_SHORT);
                     toast.show();
+
+                    if(command.equals("VoteUp")){
+                        Button voteButton = (Button)findViewById(R.id.buttonVote);
+                        String str2 = voteButton.getText().toString();
+                        str2 = str2.split(" ")[0];
+                        int num = Integer.parseInt(str2);
+                        voteButton.setText((num + 1) + " 추천");
+                    }else if(command.equals("VoteDown")){
+                        Button voteButton = (Button)findViewById(R.id.buttonVote);
+                        String str2 = voteButton.getText().toString();
+                        str2 = str2.split(" ")[0];
+                        int num = Integer.parseInt(str2);
+                        voteButton.setText((num-1) + " 추천");
+                    }else if(command.equals("VoteUpAnswer")){
+                        ListView listView = (ListView)findViewById(R.id.listViewAnswer);
+                        View rowView = (View)listView.getChildAt(pos);
+                        Button voteButton = (Button)rowView.findViewById(R.id.buttonVoteAnswer);
+                        String str2 = voteButton.getText().toString();
+                        str2 = str2.split(" ")[0];
+                        int num = Integer.parseInt(str2);
+                        voteButton.setText((num+1) + " 추천");
+                    }else{
+                        ListView listView = (ListView)findViewById(R.id.listViewAnswer);
+                        View rowView = (View)listView.getChildAt(pos);
+                        Button voteButton = (Button)rowView.findViewById(R.id.buttonVoteAnswer);
+                        String str2 = voteButton.getText().toString();
+                        str2 = str2.split(" ")[0];
+                        int num = Integer.parseInt(str2);
+                        voteButton.setText((num-1) + " 추천");
+                    }
                 }else if(result.equals("Duplicated")){
                     Toast toast = Toast.makeText(QuestionViewActivity.this, "이미 투표했습니다.", Toast.LENGTH_SHORT);
                     toast.show();

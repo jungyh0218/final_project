@@ -24,12 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="아이디 |"
+            android:textColor="#bcbcbc"
             android:id="@+id/textViewIdAnswer" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" 1분 전"
+            android:text=" 2015.12.20"
+            android:textColor="#bcbcbc"
             android:id="@+id/textViewTimeAnswer" />
     </LinearLayout>
 
@@ -47,31 +49,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/comment"
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
-            android:background="#ffffff"
-            android:id="@+id/imageButtonCommentAnswer" />
+            android:text="0 추천"
+            android:textColor="#979797"
+            android:background="@drawable/vote"
+            android:id="@+id/buttonVoteAnswer" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/like"
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
-            android:background="#ffffff"
-            android:onClick="vote2"
-            android:id="@+id/imageButtonLikeAnswer" />
+            android:background="@drawable/like"
+            android:id="@+id/buttonLikeAnswer" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/unlike"
-            android:background="#ffffff"
-            android:onClick="vote2"
-            android:id="@+id/imageButtonUnlikeAnswer" />
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:background="@drawable/unlike"
+            android:id="@+id/buttonUnlikeAnswer" />
 
     </LinearLayout>
-
 </LinearLayout>
