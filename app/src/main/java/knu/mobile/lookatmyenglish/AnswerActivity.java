@@ -31,7 +31,7 @@ public class AnswerActivity extends AppCompatActivity {
         question_id = getIntent().getIntExtra("question_id", 0);
         question_title =  getIntent().getStringExtra("title"); ///////////////★
         EditText editText = (EditText)findViewById(R.id.editTextTitle2);///////////////★
-        editText.setText(question_title+ " 번역/해석");///////////////★
+        editText.setHint(question_title + " 번역/해석");///////////////★
 
     }
 
@@ -42,6 +42,12 @@ public class AnswerActivity extends AppCompatActivity {
                 break;
 
             case R.id.imageButtonCheck: //V버튼
+                EditText editText = (EditText)findViewById(R.id.editTextTitle2);///////////////★
+                if(editText.getText().toString().equals("")){
+                    Toast toast = Toast.makeText(this, "제목을 적어주세요.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
                 String title = ((EditText)findViewById(R.id.editTextTitle2)).getText().toString();
                 String content = ((EditText)findViewById(R.id.editTextContent2)).getText().toString();
                 insert(title, content);

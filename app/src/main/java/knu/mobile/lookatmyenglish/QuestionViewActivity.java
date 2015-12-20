@@ -344,8 +344,8 @@ public class QuestionViewActivity extends AppCompatActivity {
                         str2 = str2.split(" ")[0];
                         int num = Integer.parseInt(str2);
                         voteButton.setText((num-1) + " 추천");
-                        Button votedown = (Button)rowView.findViewById(R.id.buttonLikeAnswer);
-                        votedown.setBackgroundResource(R.drawable.checklike);
+                        Button votedown = (Button)rowView.findViewById(R.id.buttonUnlikeAnswer);
+                        votedown.setBackgroundResource(R.drawable.checkunlike);
                     }
                 }else if(result.equals("Duplicated")){
                     Toast toast = Toast.makeText(QuestionViewActivity.this, "이미 투표했습니다.", Toast.LENGTH_SHORT);
