@@ -77,14 +77,21 @@ public class SearchResultActivity extends AppCompatActivity {
                 if(!SignInActivity.isLoggedIn){
                     i = new Intent(this, SignInActivity.class);
                     startActivity(i);
-                }else{
+                }
+                startActivity(i);
+                break;
+            case R.id.buttonProfile:
+                if(!SignInActivity.isLoggedIn){
+                    Intent intent = new Intent(this, SignInActivity.class);
+                    startActivity(intent);
+                }
+                else{
                     SignInActivity.isLoggedIn = false;
                     Toast toast = Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT);
                     toast.show();
                     Button loginout = (Button)findViewById(R.id.buttonProfile);
                     loginout.setText("로그인");
-                }
-                break;
+            }
         }
     }
 
