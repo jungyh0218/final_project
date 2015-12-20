@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -181,6 +182,40 @@ public class QuestionViewActivity extends AppCompatActivity {
             txtDate.setText(mAnswerList.get(position).getDate());
             txtId.setText(mAnswerList.get(position).getAnswerer() + " | ");
 
+            ImageButton likeButton = (ImageButton)rowView.findViewById(R.id.imageButtonLikeAnswer);
+            ImageButton unLikeButton = (ImageButton)rowView.findViewById(R.id.imageButtonUnlikeAnswer);
+            final int pos = position;
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!SignInActivity.isLoggedIn){
+                        Toast toast = Toast.makeText(QuestionViewActivity.this, "먼저 로그인하세요.", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Intent i = new Intent(QuestionViewActivity.this, SignInActivity.class);
+                        startActivity(i);
+                    }
+                    else {
+                        PHPUp task = new PHPUp();
+                        task.execute("VoteUpAnswer", Integer.toString(answerList.get(pos).getAnswerId()));
+                    }
+                }
+            });
+            unLikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!SignInActivity.isLoggedIn){
+                        Toast toast = Toast.makeText(QuestionViewActivity.this, "먼저 로그인하세요.", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Intent i = new Intent(QuestionViewActivity.this, SignInActivity.class);
+                        startActivity(i);
+                    }
+                    else {
+                        PHPUp task = new PHPUp();
+                        task.execute("VoteDownAnswer", Integer.toString(answerList.get(pos).getAnswerId()));
+                    }
+                }
+            });
+
             return rowView;
         }
 
@@ -213,8 +248,12 @@ public class QuestionViewActivity extends AppCompatActivity {
             String link = "";
             if(args[0].equals("VoteUp")) {
                 link = "http://knucsewiki.ivyro.net/voteup.php?question_id=" + question_id + "&memberIdx="+SignInActivity.memberIdx;
-            }else{
+            }else if(args[0].equals("VoteDown")){
                 link = "http://knucsewiki.ivyro.net/votedown.php?question_id=" + question_id + "&memberIdx="+SignInActivity.memberIdx;
+            }else if(args[0].equals("VoteUpAnswer")){
+                link = "http://knucsewiki.ivyro.net/voteup_answer.php?answer_id=" + args[1] + "&memberIdx="+SignInActivity.memberIdx;
+            }else{
+                link = "http://knucsewiki.ivyro.net/votedown_answer.php?answer_id=" + args[1] + "&memberIdx="+SignInActivity.memberIdx;
             }
             try {
                 URL url = new URL(link);
@@ -269,5 +308,6 @@ public class QuestionViewActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }

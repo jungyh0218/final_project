@@ -73,7 +73,7 @@
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/editTextCheck"
-            android:hint="영문/숫자 조합 6-13자" />
+            android:hint="확인해주세요." />
     </LinearLayout>
 
 </LinearLayout>
