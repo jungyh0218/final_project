@@ -50,7 +50,8 @@ public class SearchResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String keyword = keywordText.getText().toString();
-                searchQuestion(keyword);
+                if(!keyword.equals(""))
+                    searchQuestion(keyword);
 
             }
         });
@@ -285,6 +286,7 @@ public class SearchResultActivity extends AppCompatActivity {
             loginout.setText("로그아웃");
         }
         final EditText keywordText = (EditText)findViewById(R.id.editTextSearch);
-        searchQuestion(keywordText.getText().toString());
+        if(!keywordText.getText().toString().equals(""))
+            searchQuestion(keywordText.getText().toString());
     }
 }
